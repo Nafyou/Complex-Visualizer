@@ -13,6 +13,20 @@ interface Props {
   height?: number;
 }
 
+/**
+ * Note on the "shake" bug, because the fix here is non-obvious:
+ *
+ * Excalidraw renders arrows with rough.js. Rough.js randomizes every stroke
+ * from two inputs: a `seed` (stable per element) and the element's identity.
+ * When we call `updateScene` with fresh `convertToExcalidrawElements(...)`
+ * output, the helper by default *regenerates every element id* — which makes
+ * Excalidraw treat them as brand-new elements, invalidating the shape cache
+ * and re-rolling the wobble on every step. Passing `regenerateIds: false`
+ * keeps our skeleton ids and lets the cache hit, so the graph stops shaking.
+ *
+ * We also only ever call `scrollToContent` exactly once (on mount) — otherwise
+ * the viewport subtly re-fits on every step and reads as shake.
+ */
 export function GraphCanvasClient({ graph, step, height = 460 }: Props) {
   const apiRef = useRef<ExcalidrawImperativeAPI | null>(null);
   const didInitialScroll = useRef(false);
@@ -20,7 +34,9 @@ export function GraphCanvasClient({ graph, step, height = 460 }: Props) {
   useEffect(() => {
     if (!apiRef.current) return;
     const skeleton = buildSkeleton(graph, step);
-    const elements = convertToExcalidrawElements(skeleton as never);
+    const elements = convertToExcalidrawElements(skeleton as never, {
+      regenerateIds: false,
+    });
     apiRef.current.updateScene({ elements });
 
     if (!didInitialScroll.current) {
@@ -48,7 +64,8 @@ export function GraphCanvasClient({ graph, step, height = 460 }: Props) {
             currentItemBackgroundColor: "#F4ECDC",
             currentItemRoughness: 1,
           },
-          scrollToContent: true,
+          // No `scrollToContent: true` here — we do it manually on mount via
+          // scrollToContent() so it fires exactly once.
         }}
         viewModeEnabled
         zenModeEnabled

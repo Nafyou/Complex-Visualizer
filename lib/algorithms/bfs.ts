@@ -20,6 +20,30 @@ export const bfsSource = `function bfs(graph, start, goal) {
   return reconstructPath(parent, start, goal);
 }`;
 
+/**
+ * Python BFS — written to be line-for-line equivalent to bfsSource above,
+ * so the same `codeLine` step indices highlight the matching Python line.
+ * Blank lines are intentional padding to keep the mapping aligned.
+ */
+export const bfsSourcePython = `def bfs(graph, start, goal):
+    visited = {start}
+    parent = {}
+    queue = deque([start])
+
+    while queue:
+        current = queue.popleft()
+        if current == goal: break
+
+        for neighbor in graph[current]:
+            if neighbor in visited: continue
+            visited.add(neighbor)
+            parent[neighbor] = current
+            queue.append(neighbor)
+
+
+
+    return reconstruct_path(parent, start, goal)`;
+
 // Line numbers inside bfsSource, 1-indexed, that we highlight during runs.
 const LINE = {
   SIGNATURE: 1,

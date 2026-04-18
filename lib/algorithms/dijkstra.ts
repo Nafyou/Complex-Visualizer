@@ -26,6 +26,32 @@ export const dijkstraSource = `function dijkstra(graph, start, goal) {
   return reconstructPath(parent, start, goal);
 }`;
 
+/** Line-matched Python twin of dijkstraSource. */
+export const dijkstraSourcePython = `def dijkstra(graph, start, goal):
+    dist = {}
+    parent = {}
+    for node in graph: dist[node] = float("inf")
+    dist[start] = 0
+    pq = []
+    heapq.heappush(pq, (0, start))
+
+    while pq:
+        cost, current = heapq.heappop(pq)
+        if cost > dist[current]: continue
+        if current == goal: break
+
+        for neighbor, weight in graph[current]:
+            nxt = cost + weight
+            if nxt < dist[neighbor]:
+                dist[neighbor] = nxt
+                parent[neighbor] = current
+                heapq.heappush(pq, (nxt, neighbor))
+
+
+
+
+    return reconstruct_path(parent, start, goal)`;
+
 const LINE = {
   SIGNATURE: 1,
   INIT_DIST: 2,

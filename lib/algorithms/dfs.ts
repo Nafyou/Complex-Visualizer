@@ -21,6 +21,27 @@ export const dfsSource = `function dfs(graph, start, goal) {
   return reconstructPath(parent, start, goal);
 }`;
 
+/** Line-matched Python twin of dfsSource — same LINE indices highlight. */
+export const dfsSourcePython = `def dfs(graph, start, goal):
+    visited = set()
+    parent = {}
+    stack = [start]
+
+    while stack:
+        current = stack.pop()
+        if current in visited: continue
+        visited.add(current)
+        if current == goal: break
+
+        for neighbor in graph[current]:
+            if neighbor in visited: continue
+            parent.setdefault(neighbor, current)
+            stack.append(neighbor)
+
+
+
+    return reconstruct_path(parent, start, goal)`;
+
 const LINE = {
   SIGNATURE: 1,
   INIT_VISITED: 2,

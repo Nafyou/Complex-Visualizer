@@ -1,4 +1,4 @@
-import { runDijkstra, dijkstraSource } from "@/lib/algorithms/dijkstra";
+import { runDijkstra, dijkstraSource, dijkstraSourcePython } from "@/lib/algorithms/dijkstra";
 import { cityGraph } from "@/lib/sample-graphs";
 import type { Lesson } from "@/lib/algorithms/types";
 
@@ -19,29 +19,7 @@ export const dijkstraLesson: Lesson = {
     "Watch the heap on the side. Each step pops the cheapest candidate, then tries to improve its neighbors. Numbers on edges are weights.",
   code: dijkstraSource,
   codeLanguage: "ts",
-  pythonCode: `import heapq
-
-def dijkstra(graph, start, goal):
-    dist = {node: float("inf") for node in graph}
-    parent = {}
-    dist[start] = 0
-    pq = [(0, start)]   # (cost, node) — heapq orders by first element
-
-    while pq:
-        cost, current = heapq.heappop(pq)
-        if cost > dist[current]:
-            continue                    # stale entry — skip
-        if current == goal:
-            break
-
-        for neighbor, weight in graph[current]:
-            new_cost = cost + weight
-            if new_cost < dist[neighbor]:
-                dist[neighbor] = new_cost
-                parent[neighbor] = current
-                heapq.heappush(pq, (new_cost, neighbor))
-
-    return reconstruct_path(parent, start, goal)`,
+  pythonCode: dijkstraSourcePython,
   teacherNotes: [
     {
       when: "run",

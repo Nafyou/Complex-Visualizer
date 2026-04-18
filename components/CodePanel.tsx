@@ -5,9 +5,11 @@ import { useEffect, useRef } from "react";
 interface Props {
   code: string;
   activeLine: number;
+  /** Shown as a tiny label in the panel header. No syntax highlighting. */
+  language?: "ts" | "python";
 }
 
-export function CodePanel({ code, activeLine }: Props) {
+export function CodePanel({ code, activeLine, language = "ts" }: Props) {
   const lines = code.split("\n");
   const activeRef = useRef<HTMLDivElement | null>(null);
 
@@ -35,10 +37,15 @@ export function CodePanel({ code, activeLine }: Props) {
             className="inline-block w-2.5 h-2.5 rounded-full bg-verdigris/70"
           />
         </div>
-        <span className="font-hand text-ochre text-base">the code</span>
+        <div className="flex items-baseline gap-2">
+          <span className="font-hand text-ochre text-base">the code</span>
+          <span className="text-[10px] font-mono text-ink-quiet uppercase tracking-wider">
+            {language === "python" ? "python" : "typescript"}
+          </span>
+        </div>
       </div>
       <pre
-        className="font-mono text-[13.5px] leading-[1.7] overflow-auto max-h-[460px] text-ink"
+        className="font-mono text-[13.5px] leading-[1.7] overflow-auto max-h-115 text-ink"
         aria-label="Algorithm source, step-synced"
       >
         {lines.map((line, i) => {
@@ -49,7 +56,7 @@ export function CodePanel({ code, activeLine }: Props) {
               key={lineNumber}
               ref={isActive ? activeRef : null}
               className={[
-                "flex px-4 py-[2px] transition-colors duration-200",
+                "flex px-4 py-0.5 transition-colors duration-200",
                 isActive ? "code-line-active" : "",
               ].join(" ")}
             >

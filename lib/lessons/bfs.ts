@@ -1,4 +1,4 @@
-import { runBFS, bfsSource } from "@/lib/algorithms/bfs";
+import { runBFS, bfsSource, bfsSourcePython } from "@/lib/algorithms/bfs";
 import { cityGraph } from "@/lib/sample-graphs";
 import type { Lesson } from "@/lib/algorithms/types";
 
@@ -18,26 +18,7 @@ export const bfsLesson: Lesson = {
     "Watch how the ochre wash spreads outward in rings. The current node is the one we're looking at right now; the vermilion edges are what we're about to consider.",
   code: bfsSource,
   codeLanguage: "ts",
-  pythonCode: `from collections import deque
-
-def bfs(graph, start, goal):
-    visited = {start}
-    parent = {}
-    queue = deque([start])
-
-    while queue:
-        current = queue.popleft()
-        if current == goal:
-            break
-
-        for neighbor in graph[current]:
-            if neighbor in visited:
-                continue
-            visited.add(neighbor)
-            parent[neighbor] = current
-            queue.append(neighbor)
-
-    return reconstruct_path(parent, start, goal)`,
+  pythonCode: bfsSourcePython,
   teacherNotes: [
     {
       when: "run",

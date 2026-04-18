@@ -1,4 +1,4 @@
-import { runDFS, dfsSource } from "@/lib/algorithms/dfs";
+import { runDFS, dfsSource, dfsSourcePython } from "@/lib/algorithms/dfs";
 import { cityGraph } from "@/lib/sample-graphs";
 import type { Lesson } from "@/lib/algorithms/types";
 
@@ -18,26 +18,7 @@ export const dfsLesson: Lesson = {
     "Watch the visited wash travel in a line, not a ring. The stack at the side is what holds DFS's memory of 'places I meant to come back to.'",
   code: dfsSource,
   codeLanguage: "ts",
-  pythonCode: `def dfs(graph, start, goal):
-    visited = set()
-    parent = {}
-    stack = [start]
-
-    while stack:
-        current = stack.pop()
-        if current in visited:
-            continue
-        visited.add(current)
-        if current == goal:
-            break
-
-        for neighbor in graph[current]:
-            if neighbor in visited:
-                continue
-            parent.setdefault(neighbor, current)
-            stack.append(neighbor)
-
-    return reconstruct_path(parent, start, goal)`,
+  pythonCode: dfsSourcePython,
   teacherNotes: [
     {
       when: "run",

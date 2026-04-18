@@ -97,7 +97,15 @@ export function AlgorithmRunner({ slug }: Props) {
       </div>
 
       <div className="space-y-4">
-        <CodePanel code={lesson.code} activeLine={step.codeLine} />
+        {/* Show Python in the step-synced panel when available — Python
+            reads more clearly at this zoom level and the line numbers are
+            authored to match the TS source line-for-line. Fall back to TS
+            only if a lesson hasn't been translated. */}
+        <CodePanel
+          code={lesson.pythonCode ?? lesson.code}
+          activeLine={step.codeLine}
+          language={lesson.pythonCode ? "python" : "ts"}
+        />
       </div>
     </section>
   );

@@ -127,14 +127,14 @@ export function AlgorithmShell({ lesson }: Props) {
             <CodePair
               snippets={[
                 {
-                  language: "ts",
-                  label: "TypeScript",
-                  code: lesson.code,
-                },
-                {
                   language: "py",
                   label: "Python",
                   code: lesson.pythonCode,
+                },
+                {
+                  language: "ts",
+                  label: "TypeScript",
+                  code: lesson.code,
                 },
               ]}
             />
