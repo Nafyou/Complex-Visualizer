@@ -22,8 +22,10 @@ export function DataStructureStrip({ step }: Props) {
   const ds = step.dataStructure;
   if (!ds) return null;
 
+  // min-height reserves room for two wrapped rows of chips, so adding or
+  // removing items from the queue/stack doesn't jolt the layout below.
   return (
-    <div className="card-ink--quiet p-4">
+    <div className="card-ink--quiet p-4 min-h-24">
       <div className="flex items-center justify-between mb-2">
         <span className="font-hand text-ochre text-lg">
           {KIND_LABEL[ds.kind]}

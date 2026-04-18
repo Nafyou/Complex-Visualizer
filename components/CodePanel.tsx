@@ -9,15 +9,31 @@ interface Props {
   language?: "ts" | "python";
 }
 
+/**
+ * The step-synced code panel.
+ *
+ * Scroll behavior: we do NOT use `element.scrollIntoView`. That method scrolls
+ * every scrollable ancestor — including the page viewport — which pushes the
+ * whole lesson up or down whenever the active line changes. Felt like the
+ * page was shaking. Instead, we compute the target scrollTop directly on the
+ * <pre> and scroll it. The page stays still; only the code panel moves.
+ */
 export function CodePanel({ code, activeLine, language = "ts" }: Props) {
   const lines = code.split("\n");
+  const preRef = useRef<HTMLPreElement | null>(null);
   const activeRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    activeRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
+    const pre = preRef.current;
+    const line = activeRef.current;
+    if (!pre || !line) return;
+
+    const lineCenter = line.offsetTop + line.offsetHeight / 2;
+    const target = lineCenter - pre.clientHeight / 2;
+    const max = pre.scrollHeight - pre.clientHeight;
+    const clamped = Math.max(0, Math.min(target, max));
+
+    pre.scrollTo({ top: clamped, behavior: "smooth" });
   }, [activeLine]);
 
   return (
@@ -45,6 +61,7 @@ export function CodePanel({ code, activeLine, language = "ts" }: Props) {
         </div>
       </div>
       <pre
+        ref={preRef}
         className="font-mono text-[13.5px] leading-[1.7] overflow-auto max-h-115 text-ink"
         aria-label="Algorithm source, step-synced"
       >

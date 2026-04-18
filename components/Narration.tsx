@@ -15,11 +15,13 @@ export function Narration({ text, stepIndex, totalSteps }: Props) {
     setAnimKey((k) => k + 1);
   }, [text]);
 
+  // min-height pinned so text length changes between steps never push
+  // the layout below up or down (no shake).
   return (
-    <div className="relative pl-5">
+    <div className="relative pl-5 min-h-28">
       <span
         aria-hidden
-        className="absolute left-0 top-2 bottom-2 w-[3px] bg-ochre/70 rounded-full"
+        className="absolute left-0 top-2 bottom-2 w-0.75 bg-ochre/70 rounded-full"
       />
       <div className="flex items-baseline gap-3 mb-1">
         <span className="font-hand text-ochre text-xl">
